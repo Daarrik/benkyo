@@ -1,8 +1,7 @@
 import React from 'react';
-import type { Node } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
-const HowTo: () => Node = ({ navigation }) => {
+const HowTo = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.backdrop}>やり方</Text>
@@ -26,7 +25,7 @@ const HowTo: () => Node = ({ navigation }) => {
           correct hiragana reading for the given word within 3 attempts.
         </Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => navigation.goBack()}
           style={{ paddingTop: 25 }}>
           <Text style={{ ...styles.text, fontSize: 12, textAlign: 'center' }}>
             もど{'\t'.repeat(8)}
@@ -72,8 +71,8 @@ const styles = StyleSheet.create({
   },
   backdrop: {
     position: 'absolute',
-    bottom: -90,
     left: -40,
+    bottom: -90,
     paddingTop: 150,
     zIndex: -1,
     fontSize: 250,

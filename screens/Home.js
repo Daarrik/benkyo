@@ -1,14 +1,8 @@
 import React from 'react';
-import type { Node } from 'react';
-import {
-  StyleSheet,
-  StatusBar,
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import { HomeItem } from './../components';
 
-const Home: () => Node = ({ navigation }) => {
+const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.backdrop}>勉強</Text>
@@ -17,82 +11,31 @@ const Home: () => Node = ({ navigation }) => {
         <Text
           style={{
             ...styles.subtitle,
-
             textAlign: 'center',
           }}>
           Japanese Study App
         </Text>
       </View>
       <View style={styles.main}>
-        <TouchableOpacity onPress={() => {}} style={{ paddingBottom: 25 }}>
-          <Text style={{ ...styles.subtitle, fontSize: 12, paddingLeft: 10 }}>
-            ら{'\t'.repeat(5)}ん{'\t'.repeat(5)}だ{'\t'.repeat(4)}む
-          </Text>
-          <Text style={{ ...styles.item }}>ランダム</Text>
-          <Text
-            style={{
-              ...styles.subtitle,
-              paddingLeft: 10,
-            }}>
-            Random
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={{ paddingBottom: 25 }}>
-          <Text
-            style={{
-              ...styles.subtitle,
-              fontSize: 12,
-              paddingLeft: 10,
-            }}>
-            たん{'\t'.repeat(3)}ご{'\t'.repeat(12)}み
-          </Text>
-          <Text style={{ ...styles.item }}>単語を見る</Text>
-          <Text
-            style={{
-              ...styles.subtitle,
-              paddingLeft: 10,
-            }}>
-            Browse words
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={{ paddingBottom: 25 }}>
-          <Text
-            style={{
-              ...styles.subtitle,
-              fontSize: 12,
-              paddingLeft: 10,
-            }}>
-            たん{'\t'.repeat(3)}ご{'\t'.repeat(11)}つい{'\t'.repeat(3)}か
-          </Text>
-          <Text style={{ ...styles.item }}>単語を追加</Text>
-          <Text
-            style={{
-              ...styles.subtitle,
-              paddingLeft: 10,
-            }}>
-            Add words
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('HowTo')}
-          style={{ paddingBottom: 25 }}>
-          <Text
-            style={{
-              ...styles.subtitle,
-              fontSize: 12,
-              paddingLeft: 10,
-            }}>
-            {'\t'.repeat(13)}かた
-          </Text>
-          <Text style={{ ...styles.item }}>やり方</Text>
-          <Text
-            style={{
-              ...styles.subtitle,
-              paddingLeft: 10,
-            }}>
-            How to Play
-          </Text>
-        </TouchableOpacity>
+        <HomeItem
+          navigation={navigation}
+          itemTitle="ランダム"
+          itemSubtitle="Random"
+          screenToNavigate="Game"
+          isRandom
+        />
+        <HomeItem
+          navigation={navigation}
+          itemTitle="単語リスト"
+          itemSubtitle="Word List"
+          screenToNavigate="List"
+        />
+        <HomeItem
+          navigation={navigation}
+          itemTitle="やり方"
+          itemSubtitle="How to Play"
+          screenToNavigate="HowTo"
+        />
       </View>
     </View>
   );
@@ -124,13 +67,15 @@ const styles = StyleSheet.create({
     color: '#dadce1',
   },
   main: {
+    flexDirection: 'column',
+    alignItems: 'flex-end',
     paddingHorizontal: 24,
-    paddingVertical: 24,
+    paddingTop: 48,
   },
   backdrop: {
     position: 'absolute',
-    bottom: -90,
     left: -40,
+    bottom: -90,
     paddingTop: 150,
     zIndex: -1,
     fontSize: 350,
