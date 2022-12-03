@@ -1,26 +1,26 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-const Submit = ({ submitGuess }) => {
+const Button = ({ title, pressCallback }) => {
   return (
-    <TouchableOpacity style={styles.submit} onPress={submitGuess}>
+    <TouchableOpacity style={styles.button} onPress={pressCallback}>
       <Text style={{ fontSize: 18, color: '#001220', textAlign: 'center' }}>
-        Submit
+        {title}
       </Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  submit: {
+  button: {
     flexDirection: 'column',
     justifyContent: 'center',
+    marginHorizontal: 10,
     marginVertical: 10,
     width: '30%',
     height: 35,
     backgroundColor: '#dadce1',
-    fontSize: 18,
   },
 });
 
-export default Submit;
+export default Button;

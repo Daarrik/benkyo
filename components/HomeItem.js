@@ -11,7 +11,7 @@ const HomeItem = ({
   return (
     <TouchableOpacity
       onPress={() =>
-        navigation.navigate(screenToNavigate, { random: isRandom })
+        navigation.navigate(screenToNavigate, { isRandom: isRandom })
       }
       style={{ paddingBottom: 25 }}>
       <Text style={styles.itemTitle}>{itemTitle}</Text>

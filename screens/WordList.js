@@ -16,7 +16,6 @@ const WordList = ({ navigation }) => {
         renderItem={renderItem}
         key={item => item.kanji}
         windowSize={15}
-        indicatorStyle={'white'}
         removeClippedSubviews={true}
         initialNumToRender={5}
         maxToRenderPerBatch={5}

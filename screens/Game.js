@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, ToastAndroid, View, Text } from 'react-native';
+import { KeyboardInput, Result, Button } from './../components';
+import { kanjiList } from '../constants';
 
-import { KeyboardInput, Submit } from './../components';
-
-const Game = ({ route: { params } }) => {
-  const { random, selectedKanji } = params;
-  const [kanjiEntry, setKanjiEntry] = useState(
-    random
-      ? {
-          kanji: '漢字',
-          reading: 'かんじ',
-        }
-      : { kanji: selectedKanji['kanji'], reading: selectedKanji['reading'] },
-  );
+const Game = ({ navigation, route: { params } }) => {
+  const { isRandom, selectedKanji } = params;
+  const [kanjiEntry, setKanjiEntry] = useState(() => {
+    if (isRandom) {
+      const newEntry = kanjiList[Math.floor(Math.random() * kanjiList.length)];
+      return newEntry;
+    } else {
+      return {
+        kanji: selectedKanji['kanji'],
+        reading: selectedKanji['reading'],
+      };
+    }
+  });
   const { kanji, reading } = kanjiEntry;
 
   const [guess, setGuess] = useState('');
@@ -23,7 +26,10 @@ const Game = ({ route: { params } }) => {
   const [attempts, setAttempts] = useState(1);
 
   const submitGuess = () => {
-    if (guess === '') return;
+    if (guess === '') {
+      ToastAndroid.show('Please type a guess.', ToastAndroid.SHORT);
+      return;
+    }
 
     if (guess === reading) {
       setGuessed(true);
@@ -32,12 +38,24 @@ const Game = ({ route: { params } }) => {
     }
   };
 
+  const newGame = retry => {
+    if (!isRandom) navigation.goBack();
+
+    setGuess('');
+    setGuessed(false);
+    setAttempts(1);
+
+    if (retry) return;
+    const newEntry = kanjiList[Math.floor(Math.random() * kanjiList.length)];
+    setKanjiEntry(newEntry);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.backdrop}>{kanji}</Text>
-      <Text style={styles.text}>{random ? 'Random' : 'Select'}</Text>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>{kanji}</Text>
+      <Text style={styles.text}>{isRandom ? 'Random' : 'Select'}</Text>
+      <View style={styles.kanjiContainer}>
+        <Text style={styles.kanji}>{kanji}</Text>
       </View>
       <View style={styles.main}>
         {!guessed && attempts <= 3 ? (
@@ -48,13 +66,15 @@ const Game = ({ route: { params } }) => {
               setGuess={setGuess}
               submitGuess={submitGuess}
             />
-            <Submit submitGuess={submitGuess} />
+            <Button title="Submit" pressCallback={submitGuess} />
             <Text style={styles.text}>Attempt {attempts} of 3</Text>
           </>
         ) : (
-          <Text style={styles.text}>
-            {reading === guess ? 'correct' : 'incorrect'}
-          </Text>
+          <Result
+            isCorrect={reading === guess}
+            isRandom={isRandom}
+            newGame={newGame}
+          />
         )}
       </View>
     </View>
@@ -69,10 +89,10 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: '#001220',
   },
-  titleContainer: {
+  kanjiContainer: {
     padding: 5,
   },
-  title: {
+  kanji: {
     fontSize: 100,
     fontWeight: '400',
     textAlign: 'center',

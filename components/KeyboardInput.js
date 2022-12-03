@@ -9,6 +9,7 @@ const KeyboardInput = ({ guess, setGuess, submitGuess }) => {
       onSubmitEditing={submitGuess}
       value={guess}
       placeholder="Guess here"
+      maxLength={10}
     />
   );
 };
