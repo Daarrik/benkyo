@@ -5,10 +5,10 @@ import { kanjiList } from '../constants';
 
 const Game = ({ navigation, route: { params } }) => {
   const { isRandom, selectedKanji } = params;
+
   const [kanjiEntry, setKanjiEntry] = useState(() => {
     if (isRandom) {
-      const newEntry = kanjiList[Math.floor(Math.random() * kanjiList.length)];
-      return newEntry;
+      return kanjiList[Math.floor(Math.random() * kanjiList.length)];
     } else {
       return {
         kanji: selectedKanji['kanji'],
@@ -18,16 +18,19 @@ const Game = ({ navigation, route: { params } }) => {
   });
   const { kanji, reading } = kanjiEntry;
 
-  const [guess, setGuess] = useState('');
-  const [guessed, setGuessed] = useState(false);
-
   // 0 = TextInput, 1 = Boxes
   const [inputMethod, setInputMethod] = useState(1);
+  const [guess, setGuess] = useState('');
+  const [guessed, setGuessed] = useState(false);
   const [attempts, setAttempts] = useState(1);
 
   const submitGuess = () => {
     if (guess === '') {
-      ToastAndroid.show('Please type a guess.', ToastAndroid.SHORT);
+      ToastAndroid.showWithGravity(
+        'Please type a guess.',
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP,
+      );
       return;
     }
 
@@ -68,6 +71,11 @@ const Game = ({ navigation, route: { params } }) => {
             />
             <Button title="Submit" pressCallback={submitGuess} />
             <Text style={styles.text}>Attempt {attempts} of 3</Text>
+            <Button
+              passedStyles={{ position: 'absolute', bottom: -200, right: 0 }}
+              title={isRandom ? 'Skip' : 'Back'}
+              pressCallback={() => newGame(false)}
+            />
           </>
         ) : (
           <Result

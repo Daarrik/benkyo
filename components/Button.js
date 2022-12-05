@@ -1,9 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-const Button = ({ title, pressCallback }) => {
+const Button = ({ title, pressCallback, passedStyles }) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={pressCallback}>
+    <TouchableOpacity
+      style={{ ...styles.button, ...passedStyles }}
+      onPress={pressCallback}>
       <Text style={{ fontSize: 18, color: '#001220', textAlign: 'center' }}>
         {title}
       </Text>
