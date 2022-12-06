@@ -4,9 +4,9 @@ import Button from './Button';
 
 const Result = ({ isCorrect, isRandom, newGame }) => {
   return (
-    <>
+    <View style={styles.main}>
       <Text style={styles.result}>{isCorrect ? 'Correct!' : 'Incorrect'}</Text>
-      <View style={styles.main}>
+      <View style={styles.buttonRow}>
         {!isCorrect ? (
           <Button title="Retry" pressCallback={() => newGame(true)} />
         ) : null}
@@ -15,7 +15,7 @@ const Result = ({ isCorrect, isRandom, newGame }) => {
           pressCallback={() => newGame(false)}
         />
       </View>
-    </>
+    </View>
   );
 };
 
@@ -26,6 +26,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   main: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingTop: 24,
+    paddingBottom: 12,
+  },
+  buttonRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 24,

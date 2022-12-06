@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { StyleSheet, ToastAndroid, View, Text } from 'react-native';
-import { DragAndDrop, KeyboardInput, Result, Button } from './../components';
-import { kanjiList } from '../constants';
+import { KeyboardInput, Result, Button } from './../components';
+import { kanjiList, kana } from '../constants';
+import { shuffle } from '../constants/shuffle';
+import DuoDragDrop from '@jamsch/react-native-duo-drag-drop';
 
 const Game = ({ navigation, route: { params } }) => {
   const { isRandom, selectedKanji } = params;
@@ -18,11 +20,27 @@ const Game = ({ navigation, route: { params } }) => {
   });
   const { kanji, reading } = kanjiEntry;
 
-  // 0 = TextInput, 1 = Boxes
-  const [inputMethod, setInputMethod] = useState(0);
+  const [textInput, setTextInput] = useState(true);
   const [guess, setGuess] = useState('');
   const [guessed, setGuessed] = useState(false);
   const [attempts, setAttempts] = useState(1);
+
+  const ref = useRef(null);
+
+  const generateBoxes = useCallback(() => {
+    wrongAnswers = [];
+    for (let i = 0; i < 7 - reading.length; i++)
+      wrongAnswers.push(kana.charAt(Math.random() * kana.length));
+
+    const answers = shuffle(reading.split('').concat(wrongAnswers));
+    return answers;
+  });
+
+  const [boxes, setBoxes] = useState(generateBoxes());
+
+  useEffect(() => {
+    setBoxes(generateBoxes());
+  }, [kanjiEntry]);
 
   const submitGuess = () => {
     if (guess === '') {
@@ -42,7 +60,7 @@ const Game = ({ navigation, route: { params } }) => {
   };
 
   const newGame = retry => {
-    if (!isRandom) navigation.goBack();
+    if (!isRandom && !retry) navigation.goBack();
 
     setGuess('');
     setGuessed(false);
@@ -55,55 +73,82 @@ const Game = ({ navigation, route: { params } }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.backdrop}>{kanji}</Text>
-      <Text style={styles.text}>{isRandom ? 'Random' : 'Select'}</Text>
-      <View style={styles.kanjiContainer}>
-        <Text style={styles.kanji}>{kanji}</Text>
-      </View>
-      <View style={styles.main}>
-        {!guessed && attempts <= 3 ? (
-          <>
-            {inputMethod === 0 ? (
+      <Text style={kanji.length === 2 ? styles.backdrop : styles.backdrop2}>
+        {kanji}
+      </Text>
+      <Text style={styles.text}>{`( ${isRandom ? 'Random' : 'Select'} )`}</Text>
+      <Text style={{ ...styles.text, paddingBottom: 10, textAlign: 'left' }}>
+        What is the reading of this word?
+      </Text>
+      <Text style={styles.kanji}>{kanji}</Text>
+      {!guessed && attempts <= 3 ? (
+        <>
+          {textInput ? (
+            <View style={styles.main}>
               <KeyboardInput
                 guess={guess}
                 setGuess={setGuess}
                 submitGuess={submitGuess}
               />
-            ) : (
-              <DragAndDrop reading={reading} />
-            )}
-            <Button title="Submit" pressCallback={submitGuess} />
-            <Text style={styles.text}>Attempt {attempts} of 3</Text>
+
+              <Button title="Submit" pressCallback={submitGuess} />
+            </View>
+          ) : (
+            <>
+              <DuoDragDrop
+                ref={ref}
+                words={boxes}
+                onDrop={() => setGuess(ref.current.getAnsweredWords().join(''))}
+                wordHeight={42}
+                renderPlaceholder={({ style }) => (
+                  <View
+                    style={{
+                      ...style,
+                      borderRadius: 5,
+                      backgroundColor: 'white',
+                      opacity: 0.25,
+                    }}
+                  />
+                )}
+              />
+              <View style={styles.main}>
+                <Button title="Submit" pressCallback={() => submitGuess()} />
+              </View>
+            </>
+          )}
+          <Text style={styles.text}>Attempt {attempts} of 3</Text>
+          {isRandom && (
             <Button
-              passedStyles={{ position: 'absolute', bottom: -200, right: 0 }}
-              title={isRandom ? 'Skip' : 'Back'}
+              passedStyles={{ position: 'absolute', bottom: 0, right: 0 }}
+              title="Skip"
               pressCallback={() => newGame(false)}
             />
-          </>
-        ) : (
-          <Result
-            isCorrect={reading === guess}
-            isRandom={isRandom}
-            newGame={newGame}
+          )}
+          <Button
+            passedStyles={{ position: 'absolute', bottom: 0, left: 0 }}
+            title="Switch"
+            pressCallback={() => setTextInput(!textInput)}
           />
-        )}
-      </View>
+        </>
+      ) : (
+        <Result
+          isCorrect={reading === guess}
+          isRandom={isRandom}
+          newGame={newGame}
+        />
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
     height: '100%',
     padding: 24,
     backgroundColor: '#001220',
   },
-  kanjiContainer: {
-    padding: 5,
-  },
   kanji: {
+    padding: 5,
     fontSize: 100,
     fontWeight: '400',
     textAlign: 'center',
@@ -118,7 +163,6 @@ const styles = StyleSheet.create({
   main: {
     flexDirection: 'column',
     alignItems: 'center',
-    paddingHorizontal: 24,
     paddingTop: 24,
     paddingBottom: 12,
   },
@@ -130,6 +174,16 @@ const styles = StyleSheet.create({
     zIndex: -1,
     fontSize: 350,
     lineHeight: 330,
+    opacity: 0.65,
+  },
+  backdrop2: {
+    position: 'absolute',
+    left: -40,
+    bottom: -90,
+    paddingTop: 150,
+    zIndex: -1,
+    fontSize: 250,
+    lineHeight: 230,
     opacity: 0.65,
   },
 });

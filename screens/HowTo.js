@@ -5,9 +5,7 @@ const HowTo = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.backdrop}>やり方</Text>
-      <View style={styles.titleContainer}>
-        <Text style={{ ...styles.title }}>How to Play</Text>
-      </View>
+      <Text style={{ ...styles.title }}>How to Play</Text>
       <View style={styles.main}>
         <Text style={styles.text}>
           {'\t'.repeat(2)}
@@ -27,9 +25,6 @@ const HowTo = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={{ paddingTop: 25 }}>
-          <Text style={{ ...styles.text, fontSize: 12, textAlign: 'center' }}>
-            もど{'\t'.repeat(8)}
-          </Text>
           <Text style={{ ...styles.title }}>戻る</Text>
           <Text
             style={{
@@ -51,10 +46,8 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: '#001220',
   },
-  titleContainer: {
-    padding: 5,
-  },
   title: {
+    padding: 5,
     fontSize: 50,
     fontWeight: '600',
     textAlign: 'center',
