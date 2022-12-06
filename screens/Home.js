@@ -21,7 +21,7 @@ const Home = ({ navigation }) => {
           navigation={navigation}
           itemTitle="ランダム"
           itemSubtitle="Random"
-          screenToNavigate="Game"
+          screenToNavigate="Game2"
           isRandom
         />
         <HomeItem

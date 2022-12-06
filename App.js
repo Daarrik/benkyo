@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
-import { Home, Game, WordList, HowTo } from './screens';
+import { Home, Game, GameTest, WordList, HowTo } from './screens';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -15,6 +15,7 @@ const App = () => {
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Game" component={Game} />
+        <Stack.Screen name="Game2" component={GameTest} />
         <Stack.Screen name="List" component={WordList} />
         <Stack.Screen name="HowTo" component={HowTo} />
       </Stack.Navigator>

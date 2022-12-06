@@ -3,7 +3,7 @@ import { StyleSheet, ToastAndroid, View, Text } from 'react-native';
 import { DragAndDrop, KeyboardInput, Result, Button } from './../components';
 import { kanjiList } from '../constants';
 
-const Game = ({ navigation, route: { params } }) => {
+const GameTest = ({ navigation, route: { params } }) => {
   const { isRandom, selectedKanji } = params;
 
   const [kanjiEntry, setKanjiEntry] = useState(() => {
@@ -19,7 +19,7 @@ const Game = ({ navigation, route: { params } }) => {
   const { kanji, reading } = kanjiEntry;
 
   // 0 = TextInput, 1 = Boxes
-  const [inputMethod, setInputMethod] = useState(0);
+  const [inputMethod, setInputMethod] = useState(1);
   const [guess, setGuess] = useState('');
   const [guessed, setGuessed] = useState(false);
   const [attempts, setAttempts] = useState(1);
@@ -54,40 +54,15 @@ const Game = ({ navigation, route: { params } }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.backdrop}>{kanji}</Text>
-      <Text style={styles.text}>{isRandom ? 'Random' : 'Select'}</Text>
-      <View style={styles.kanjiContainer}>
-        <Text style={styles.kanji}>{kanji}</Text>
-      </View>
-      <View style={styles.main}>
-        {!guessed && attempts <= 3 ? (
-          <>
-            {inputMethod === 0 ? (
-              <KeyboardInput
-                guess={guess}
-                setGuess={setGuess}
-                submitGuess={submitGuess}
-              />
-            ) : (
-              <DragAndDrop reading={reading} />
-            )}
-            <Button title="Submit" pressCallback={submitGuess} />
-            <Text style={styles.text}>Attempt {attempts} of 3</Text>
-            <Button
-              passedStyles={{ position: 'absolute', bottom: -200, right: 0 }}
-              title={isRandom ? 'Skip' : 'Back'}
-              pressCallback={() => newGame(false)}
-            />
-          </>
-        ) : (
-          <Result
-            isCorrect={reading === guess}
-            isRandom={isRandom}
-            newGame={newGame}
-          />
-        )}
-      </View>
+    <View>
+      <DragAndDrop reading={reading} />
+      {/* <Button title="Submit" pressCallback={submitGuess} />
+        <Text style={styles.text}>Attempt {attempts} of 3</Text>
+        <Button
+          passedStyles={{ position: 'absolute', bottom: -200, right: 0 }}
+          title={isRandom ? 'Skip' : 'Back'}
+          pressCallback={() => newGame(false)}
+        /> */}
     </View>
   );
 };
@@ -134,4 +109,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Game;
+export default GameTest;
