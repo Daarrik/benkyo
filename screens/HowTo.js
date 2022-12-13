@@ -15,9 +15,9 @@ const HowTo = ({ navigation }) => {
           (常用漢字). If you are unfamiliar with hiragana and/or Kanji, you can
           study (some of) it here or use other fantastic Japanese-specific
           language learning resources! {'\n'.repeat(2)}
-          {'\t'.repeat(2)}To begin, select Random (ランダム) or Browse words
-          (単語を見る) on the Home screen. Random (appropriately named) will
-          provide random words from a list of 800+. In Browse words you can
+          {'\t'.repeat(2)}To begin, select Random (ランダム) or Word List
+          (単語リスト) on the Home screen. Random (appropriately named) will
+          provide random words from a list of 800+. In the Word List you can
           choose a specific word from the list to study. The{' '}
           <Text style={{ fontFamily: 'Nunito-Bold' }}>goal</Text> is to input
           the correct hiragana reading for the given word within 3 attempts.
