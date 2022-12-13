@@ -16,9 +16,11 @@ const KeyboardInput = ({ guess, setGuess, submitGuess }) => {
 
 const styles = StyleSheet.create({
   textInput: {
-    marginTop: 5,
-    width: '50%',
+    width: '70%',
+    height: 80,
+    borderRadius: 10,
     backgroundColor: '#dadce1',
+    fontFamily: 'Nunito-Bold',
     fontSize: 20,
     fontWeight: 'bold',
     color: 'black',

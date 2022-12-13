@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     padding: 24,
-    backgroundColor: '#001220',
+    backgroundColor: '#161f23',
   },
   backdrop: {
     position: 'absolute',
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     zIndex: -1,
     fontSize: 250,
     lineHeight: 230,
-    opacity: 0.65,
+    opacity: 0.5,
   },
 });
 

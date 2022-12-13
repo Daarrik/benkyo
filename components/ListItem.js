@@ -15,8 +15,8 @@ const ListItem = ({ navigation, selectedKanji }) => {
 
 const styles = StyleSheet.create({
   itemTitle: {
-    paddingHorizontal: 10,
-    fontSize: 48,
+    paddingHorizontal: 15,
+    fontSize: 60,
     fontWeight: '400',
     color: '#dadce1',
   },

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { View, Button, ScrollView } from 'react-native';
+import { View } from 'react-native';
 import DuoDragDrop from '@jamsch/react-native-duo-drag-drop';
 
 const DragAndDrop = ({ reading }) => {

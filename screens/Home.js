@@ -45,19 +45,20 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     padding: 24,
-    backgroundColor: '#001220',
+    backgroundColor: '#161f23',
   },
   titleContainer: {
     padding: 5,
   },
   title: {
-    fontSize: 80,
-    fontWeight: '600',
+    fontFamily: 'Nunito-Bold',
+    fontSize: 90,
     textAlign: 'center',
     color: '#dadce1',
   },
   subtitle: {
-    fontSize: 16,
+    fontFamily: 'Nunito-Bold',
+    fontSize: 20,
     fontWeight: '400',
     color: '#dadce1',
   },
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flexDirection: 'column',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     paddingHorizontal: 24,
     paddingTop: 48,
   },
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     zIndex: -1,
     fontSize: 350,
     lineHeight: 330,
-    opacity: 0.65,
+    opacity: 0.5,
   },
 });
 

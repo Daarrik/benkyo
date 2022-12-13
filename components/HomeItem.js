@@ -22,16 +22,16 @@ const HomeItem = ({
 
 const styles = StyleSheet.create({
   itemTitle: {
-    fontSize: 48,
+    fontSize: 58,
     fontWeight: '600',
     color: '#dadce1',
   },
   itemSubtitle: {
-    paddingRight: 10,
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '400',
     color: '#dadce1',
-    textAlign: 'right',
+    textAlign: 'center',
+    fontFamily: 'Nunito-Regular',
   },
 });
 

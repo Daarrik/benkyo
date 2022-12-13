@@ -6,7 +6,14 @@ const Button = ({ title, pressCallback, passedStyles }) => {
     <TouchableOpacity
       style={{ ...styles.button, ...passedStyles }}
       onPress={pressCallback}>
-      <Text style={{ fontSize: 18, color: '#001220', textAlign: 'center' }}>
+      <Text
+        style={{
+          fontSize: 18,
+          color: '#001220',
+          fontFamily: 'Nunito-Bold',
+          textAlign: 'center',
+          fontWeight: '400',
+        }}>
         {title}
       </Text>
     </TouchableOpacity>
@@ -19,8 +26,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 10,
     marginVertical: 10,
-    width: '30%',
-    height: 35,
+    width: '60%',
+    height: 55,
+    borderRadius: 10,
     backgroundColor: '#dadce1',
   },
 });

@@ -20,7 +20,7 @@ const Game = ({ navigation, route: { params } }) => {
   });
   const { kanji, reading } = kanjiEntry;
 
-  const [textInput, setTextInput] = useState(true);
+  const [textInput, setTextInput] = useState(false);
   const [guess, setGuess] = useState('');
   const [guessed, setGuessed] = useState(false);
   const [attempts, setAttempts] = useState(1);
@@ -28,6 +28,8 @@ const Game = ({ navigation, route: { params } }) => {
   const ref = useRef(null);
 
   const generateBoxes = useCallback(() => {
+    if (reading.length >= 7) return shuffle(reading.split(''));
+
     wrongAnswers = [];
     for (let i = 0; i < 7 - reading.length; i++)
       wrongAnswers.push(kana.charAt(Math.random() * kana.length));
@@ -36,7 +38,7 @@ const Game = ({ navigation, route: { params } }) => {
     return answers;
   });
 
-  const [boxes, setBoxes] = useState(generateBoxes());
+  const [boxes, setBoxes] = useState(() => generateBoxes());
 
   useEffect(() => {
     setBoxes(generateBoxes());
@@ -44,11 +46,7 @@ const Game = ({ navigation, route: { params } }) => {
 
   const submitGuess = () => {
     if (guess === '') {
-      ToastAndroid.showWithGravity(
-        'Please type a guess.',
-        ToastAndroid.SHORT,
-        ToastAndroid.TOP,
-      );
+      ToastAndroid.show('Please input a guess.', ToastAndroid.SHORT);
       return;
     }
 
@@ -76,11 +74,35 @@ const Game = ({ navigation, route: { params } }) => {
       <Text style={kanji.length === 2 ? styles.backdrop : styles.backdrop2}>
         {kanji}
       </Text>
-      <Text style={styles.text}>{`( ${isRandom ? 'Random' : 'Select'} )`}</Text>
-      <Text style={{ ...styles.text, paddingBottom: 10, textAlign: 'left' }}>
+      <Text
+        style={{
+          ...styles.text,
+          paddingBottom: 10,
+          textAlign: 'left',
+          fontFamily: 'Nunito-Light',
+        }}>
+        {isRandom ? 'Random Mode' : 'Selected Mode'}
+      </Text>
+      <Text
+        style={{
+          ...styles.text,
+          paddingBottom: 10,
+          textAlign: 'left',
+          fontFamily: 'Nunito-Bold',
+        }}>
         What is the reading of this word?
       </Text>
       <Text style={styles.kanji}>{kanji}</Text>
+      {attempts <= 3 && (
+        <Text
+          style={{
+            ...styles.text,
+            paddingBottom: 20,
+            fontFamily: 'Nunito-SemiBold',
+          }}>
+          Attempt {attempts} of 3
+        </Text>
+      )}
       {!guessed && attempts <= 3 ? (
         <>
           {textInput ? (
@@ -90,52 +112,49 @@ const Game = ({ navigation, route: { params } }) => {
                 setGuess={setGuess}
                 submitGuess={submitGuess}
               />
-
-              <Button title="Submit" pressCallback={submitGuess} />
             </View>
           ) : (
-            <>
-              <DuoDragDrop
-                ref={ref}
-                words={boxes}
-                onDrop={() => setGuess(ref.current.getAnsweredWords().join(''))}
-                wordHeight={42}
-                renderPlaceholder={({ style }) => (
-                  <View
-                    style={{
-                      ...style,
-                      borderRadius: 5,
-                      backgroundColor: 'white',
-                      opacity: 0.25,
-                    }}
-                  />
-                )}
-              />
-              <View style={styles.main}>
-                <Button title="Submit" pressCallback={() => submitGuess()} />
-              </View>
-            </>
-          )}
-          <Text style={styles.text}>Attempt {attempts} of 3</Text>
-          {isRandom && (
-            <Button
-              passedStyles={{ position: 'absolute', bottom: 0, right: 0 }}
-              title="Skip"
-              pressCallback={() => newGame(false)}
+            <DuoDragDrop
+              ref={ref}
+              words={boxes}
+              onDrop={() => setGuess(ref.current.getAnsweredWords().join(''))}
+              wordHeight={42}
+              renderPlaceholder={({ style }) => (
+                <View
+                  style={{
+                    ...style,
+                    borderRadius: 5,
+                    backgroundColor: 'white',
+                    opacity: 0.25,
+                  }}
+                />
+              )}
             />
           )}
-          <Button
-            passedStyles={{ position: 'absolute', bottom: 0, left: 0 }}
-            title="Switch"
-            pressCallback={() => setTextInput(!textInput)}
-          />
+          <View style={styles.main}>
+            <Button
+              passedStyles={{ backgroundColor: 'mediumspringgreen' }}
+              title="Enter"
+              pressCallback={submitGuess}
+            />
+            {isRandom && (
+              <Button title="Skip →" pressCallback={() => newGame(false)} />
+            )}
+            <Button
+              title={textInput ? 'Use Drag and Drop' : 'Use Keyboard'}
+              pressCallback={() => setTextInput(!textInput)}
+            />
+          </View>
         </>
       ) : (
-        <Result
-          isCorrect={reading === guess}
-          isRandom={isRandom}
-          newGame={newGame}
-        />
+        <View style={styles.main}>
+          <Result
+            reading={reading}
+            isCorrect={reading === guess}
+            isRandom={isRandom}
+            newGame={newGame}
+          />
+        </View>
       )}
     </View>
   );
@@ -145,7 +164,7 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     padding: 24,
-    backgroundColor: '#001220',
+    backgroundColor: '#161f23',
   },
   kanji: {
     padding: 5,
@@ -155,9 +174,10 @@ const styles = StyleSheet.create({
     color: '#dadce1',
   },
   text: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '400',
     color: '#dadce1',
+    fontFamily: 'Nunito-Regular',
     textAlign: 'center',
   },
   main: {
@@ -174,7 +194,7 @@ const styles = StyleSheet.create({
     zIndex: -1,
     fontSize: 350,
     lineHeight: 330,
-    opacity: 0.65,
+    opacity: 0.5,
   },
   backdrop2: {
     position: 'absolute',
@@ -184,7 +204,7 @@ const styles = StyleSheet.create({
     zIndex: -1,
     fontSize: 250,
     lineHeight: 230,
-    opacity: 0.65,
+    opacity: 0.5,
   },
 });
 
