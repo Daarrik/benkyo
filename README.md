@@ -6,11 +6,11 @@
 
 ### How to Run
 
-I started this project knowing close to nothing about React Native, but a solid background in React. I was unaware of tools like Expo and as such wrote Benkyo using the `npx` commands. I am not sure how building the app in an Expo environment would work for those of you more experienced than I am.
+This is unfortunately <b>not</b> an Expo project.
 
 First follow the development environment setup for React Native [here](https://reactnative.dev/docs/environment-setup).
 
-1. `npm install` or `yarn` (or both for all I know)
+1. `npm install` or `yarn`
 
 2. In a terminal: `npx react-native start`
 
