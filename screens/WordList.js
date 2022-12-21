@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { ListItem } from './../components';
-import { kanjiList } from '../constants';
+import { words } from '../constants';
 
 const WordList = ({ navigation }) => {
   const renderItem = ({ item }) => (
@@ -12,7 +12,7 @@ const WordList = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.backdrop}>リスト</Text>
       <FlatList
-        data={kanjiList}
+        data={words}
         renderItem={renderItem}
         key={item => item.kanji}
         windowSize={15}

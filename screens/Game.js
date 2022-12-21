@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { StyleSheet, ToastAndroid, View, Text } from 'react-native';
 import { KeyboardInput, Result, Button } from './../components';
-import { kanjiList, kana } from '../constants';
-import { shuffle } from '../constants/shuffle';
+import { words, kana } from '../constants';
 import DuoDragDrop from '@jamsch/react-native-duo-drag-drop';
 
 const Game = ({ navigation, route: { params } }) => {
@@ -10,7 +9,7 @@ const Game = ({ navigation, route: { params } }) => {
 
   const [kanjiEntry, setKanjiEntry] = useState(() => {
     if (isRandom) {
-      return kanjiList[Math.floor(Math.random() * kanjiList.length)];
+      return words[Math.floor(Math.random() * words.length)];
     } else {
       return {
         kanji: selectedKanji['kanji'],
@@ -65,7 +64,7 @@ const Game = ({ navigation, route: { params } }) => {
     setAttempts(1);
 
     if (retry) return;
-    const newEntry = kanjiList[Math.floor(Math.random() * kanjiList.length)];
+    const newEntry = words[Math.floor(Math.random() * words.length)];
     setKanjiEntry(newEntry);
   };
 
@@ -207,5 +206,25 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
 });
+
+export const shuffle = array => {
+  let currentIndex = array.length,
+    randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+
+  return array;
+};
 
 export default Game;
