@@ -78,7 +78,7 @@ const Game = ({ navigation, route: { params } }) => {
           ...styles.text,
           paddingBottom: 10,
           textAlign: 'left',
-          fontFamily: 'Nunito-Light',
+          fontFamily: 'Nunito-Regular',
         }}>
         {isRandom ? 'Random Mode' : 'Selected Mode'}
       </Text>
@@ -97,7 +97,7 @@ const Game = ({ navigation, route: { params } }) => {
           style={{
             ...styles.text,
             paddingBottom: 20,
-            fontFamily: 'Nunito-SemiBold',
+            fontFamily: 'Nunito-Regular',
           }}>
           Attempt {attempts} of 3
         </Text>

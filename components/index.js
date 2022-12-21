@@ -4,3 +4,4 @@ export { default as KeyboardInput } from './KeyboardInput';
 export { default as DragAndDrop } from './DragAndDrop';
 export { default as Result } from './Result';
 export { default as Button } from './Button';
+export { default as NunitoText } from './NunitoText';
