@@ -1,25 +1,30 @@
-import React, { useCallback } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import React from 'react';
+import { Pressable } from 'react-native';
+import { BenkyoText } from '.';
+import { styles } from '../constants';
 
-const ListItem = ({ navigation, selectedKanji }) => {
-  const openWord = useCallback(() => {
-    navigation.navigate('Game', { selectedKanji });
-  }, []);
+const { header2, textBold, textCenter } = styles;
 
+const ListItem = ({
+  navigation,
+  screenToNavigate,
+  title,
+  subtitle,
+  isRandom,
+  selectedEntry,
+}) => {
   return (
-    <Text style={styles.itemTitle} onPress={openWord}>
-      {selectedKanji['kanji']}
-    </Text>
+    <Pressable
+      onPress={() =>
+        navigation.navigate(screenToNavigate, {
+          isRandom: isRandom,
+          selectedEntry: selectedEntry,
+        })
+      }>
+      <BenkyoText style={[header2, textBold, textCenter]}>{title}</BenkyoText>
+      {subtitle && <BenkyoText style={textCenter}>{subtitle}</BenkyoText>}
+    </Pressable>
   );
 };
-
-const styles = StyleSheet.create({
-  itemTitle: {
-    paddingHorizontal: 15,
-    fontSize: 60,
-    fontWeight: '400',
-    color: '#dadce1',
-  },
-});
 
 export default ListItem;

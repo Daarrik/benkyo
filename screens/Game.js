@@ -1,19 +1,29 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { StyleSheet, ToastAndroid, View, Text } from 'react-native';
-import { KeyboardInput, Result, Button } from './../components';
-import { words, kana } from '../constants';
-import DuoDragDrop from '@jamsch/react-native-duo-drag-drop';
+import React, { useState, useEffect, useCallback } from 'react';
+import { ToastAndroid, View } from 'react-native';
+import {
+  Container,
+  HeaderBox,
+  BenkyoText,
+  BenkyoButton,
+  KeyboardInput,
+  Result,
+  Backdrop,
+  DragAndDrop,
+} from '../components';
+import { words, kana, styles } from '../constants';
+
+const { header, textBold, textCenter } = styles;
 
 const Game = ({ navigation, route: { params } }) => {
-  const { isRandom, selectedKanji } = params;
+  const { isRandom, selectedEntry } = params;
 
   const [kanjiEntry, setKanjiEntry] = useState(() => {
     if (isRandom) {
       return words[Math.floor(Math.random() * words.length)];
     } else {
       return {
-        kanji: selectedKanji['kanji'],
-        reading: selectedKanji['reading'],
+        kanji: selectedEntry['kanji'],
+        reading: selectedEntry['reading'],
       };
     }
   });
@@ -22,11 +32,8 @@ const Game = ({ navigation, route: { params } }) => {
   const [textInput, setTextInput] = useState(false);
   const [guess, setGuess] = useState('');
   const [guessed, setGuessed] = useState(false);
-  const [attempts, setAttempts] = useState(1);
 
-  const ref = useRef(null);
-
-  const generateBoxes = useCallback(() => {
+  const generateKanaBoxes = useCallback(() => {
     if (reading.length >= 7) return shuffle(reading.split(''));
 
     wrongAnswers = [];
@@ -36,176 +43,64 @@ const Game = ({ navigation, route: { params } }) => {
     const answers = shuffle(reading.split('').concat(wrongAnswers));
     return answers;
   });
+  const [kanaBoxes, setKanaBoxes] = useState(() => generateKanaBoxes());
 
-  const [boxes, setBoxes] = useState(() => generateBoxes());
-
+  // Could potentially get rid of this by including answers as non-stateful
   useEffect(() => {
-    setBoxes(generateBoxes());
+    setKanaBoxes(generateKanaBoxes());
   }, [kanjiEntry]);
 
   const submitGuess = () => {
     if (guess === '') {
-      ToastAndroid.show('Please input a guess.', ToastAndroid.SHORT);
+      ToastAndroid.showWithGravity(
+        'Please input a guess.',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
       return;
     }
 
-    if (guess === reading) {
-      setGuessed(true);
-    } else {
-      setAttempts(attempts => attempts + 1);
-    }
+    setGuessed(true);
   };
 
-  const newGame = retry => {
-    if (!isRandom && !retry) navigation.goBack();
+  const newGame = () => {
+    if (!isRandom) navigation.goBack();
 
     setGuess('');
     setGuessed(false);
-    setAttempts(1);
 
-    if (retry) return;
     const newEntry = words[Math.floor(Math.random() * words.length)];
     setKanjiEntry(newEntry);
   };
 
+  const displayInput = () => {
+    if (textInput) {
+      return <KeyboardInput guess={guess} setGuess={setGuess} />;
+    } else {
+      return <DragAndDrop kanaBoxes={kanaBoxes} setGuess={setGuess} />;
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={kanji.length === 2 ? styles.backdrop : styles.backdrop2}>
-        {kanji}
-      </Text>
-      <Text
-        style={{
-          ...styles.text,
-          paddingBottom: 10,
-          textAlign: 'left',
-          fontFamily: 'Nunito-Regular',
-        }}>
-        {isRandom ? 'Random Mode' : 'Selected Mode'}
-      </Text>
-      <Text
-        style={{
-          ...styles.text,
-          paddingBottom: 10,
-          textAlign: 'left',
-          fontFamily: 'Nunito-Bold',
-        }}>
-        What is the reading of this word?
-      </Text>
-      <Text style={styles.kanji}>{kanji}</Text>
-      {attempts <= 3 && (
-        <Text
-          style={{
-            ...styles.text,
-            paddingBottom: 20,
-            fontFamily: 'Nunito-Regular',
-          }}>
-          Attempt {attempts} of 3
-        </Text>
-      )}
-      {!guessed && attempts <= 3 ? (
-        <>
-          {textInput ? (
-            <View style={styles.main}>
-              <KeyboardInput
-                guess={guess}
-                setGuess={setGuess}
-                submitGuess={submitGuess}
-              />
-            </View>
-          ) : (
-            <DuoDragDrop
-              ref={ref}
-              words={boxes}
-              onDrop={() => setGuess(ref.current.getAnsweredWords().join(''))}
-              wordHeight={42}
-              renderPlaceholder={({ style }) => (
-                <View
-                  style={{
-                    ...style,
-                    borderRadius: 5,
-                    backgroundColor: 'white',
-                    opacity: 0.25,
-                  }}
-                />
-              )}
-            />
-          )}
-          <View style={styles.main}>
-            <Button
-              passedStyles={{ backgroundColor: 'mediumspringgreen' }}
-              title="Enter"
-              pressCallback={submitGuess}
-            />
-            {isRandom && (
-              <Button title="Skip →" pressCallback={() => newGame(false)} />
-            )}
-            <Button
-              title={textInput ? 'Use Drag and Drop' : 'Use Keyboard'}
-              pressCallback={() => setTextInput(!textInput)}
-            />
-          </View>
-        </>
-      ) : (
-        <View style={styles.main}>
-          <Result
-            reading={reading}
-            isCorrect={reading === guess}
-            isRandom={isRandom}
-            newGame={newGame}
-          />
-        </View>
-      )}
-    </View>
+    <Container>
+      <Backdrop word={kanji} />
+      <HeaderBox>
+        <BenkyoText style={[textBold, textCenter]}>
+          What is the reading of this word?
+        </BenkyoText>
+        <BenkyoText style={[header, textBold, textCenter]}>{kanji}</BenkyoText>
+      </HeaderBox>
+      <View style={{ flex: 1, justifyContent: 'space-between' }}>
+        {!guessed ? displayInput() : <Result isCorrect={reading === guess} />}
+        <BenkyoButton
+          style={{ backgroundColor: 'darkgreen' }}
+          title="Continue"
+          onPress={!guessed ? submitGuess : newGame}
+        />
+      </View>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    padding: 24,
-    backgroundColor: '#161f23',
-  },
-  kanji: {
-    padding: 5,
-    fontSize: 100,
-    fontWeight: '400',
-    textAlign: 'center',
-    color: '#dadce1',
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: '400',
-    color: '#dadce1',
-    fontFamily: 'Nunito-Regular',
-    textAlign: 'center',
-  },
-  main: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    paddingTop: 24,
-    paddingBottom: 12,
-  },
-  backdrop: {
-    position: 'absolute',
-    left: -40,
-    bottom: -90,
-    paddingTop: 150,
-    zIndex: -1,
-    fontSize: 350,
-    lineHeight: 330,
-    opacity: 0.5,
-  },
-  backdrop2: {
-    position: 'absolute',
-    left: -40,
-    bottom: -90,
-    paddingTop: 150,
-    zIndex: -1,
-    fontSize: 250,
-    lineHeight: 230,
-    opacity: 0.5,
-  },
-});
 
 export const shuffle = array => {
   let currentIndex = array.length,

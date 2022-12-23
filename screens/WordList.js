@@ -1,20 +1,29 @@
 import React from 'react';
-import { StyleSheet, View, Text, FlatList } from 'react-native';
-import { ListItem } from './../components';
+import { FlatList } from 'react-native';
+import { Container, Backdrop, ListItem } from '../components';
 import { words } from '../constants';
 
 const WordList = ({ navigation }) => {
-  const renderItem = ({ item }) => (
-    <ListItem navigation={navigation} selectedKanji={item} />
-  );
+  const renderItem = ({ item }) => {
+    const { kanji } = item;
+
+    return (
+      <ListItem
+        navigation={navigation}
+        screenToNavigate="Game"
+        title={kanji}
+        selectedEntry={item}
+      />
+    );
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.backdrop}>リスト</Text>
+    <Container>
+      <Backdrop word="リスト" />
       <FlatList
+        key={item => item.kanji}
         data={words}
         renderItem={renderItem}
-        key={item => item.kanji}
         windowSize={15}
         removeClippedSubviews={true}
         initialNumToRender={5}
@@ -24,26 +33,8 @@ const WordList = ({ navigation }) => {
           alignItems: 'flex-end',
         }}
       />
-    </View>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    padding: 24,
-    backgroundColor: '#161f23',
-  },
-  backdrop: {
-    position: 'absolute',
-    left: -40,
-    bottom: -90,
-    paddingTop: 150,
-    zIndex: -1,
-    fontSize: 250,
-    lineHeight: 230,
-    opacity: 0.5,
-  },
-});
 
 export default WordList;
