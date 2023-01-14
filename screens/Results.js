@@ -6,12 +6,14 @@ import {
   HeaderBox,
   ListItem,
   BenkyoText,
+  BenkyoButton,
 } from '../components';
-import { words, styles } from '../constants';
+import { styles } from '../constants';
 
 const { header3, textBold, textCenter } = styles;
 
-const WordList = ({ navigation }) => {
+const Results = ({ navigation, route: { params } }) => {
+  const { testedWords } = params;
   const renderItem = ({ item }) => {
     const { kanji } = item;
 
@@ -21,33 +23,33 @@ const WordList = ({ navigation }) => {
         screenToNavigate="Game"
         title={kanji}
         selectedEntry={item}
+        subtitle={!item.correct && 'Incorrect'}
       />
     );
   };
 
   return (
     <Container>
-      <Backdrop word="リスト" />
+      <Backdrop word="成績" />
       <HeaderBox>
-        <BenkyoText style={[header3, textBold, textCenter]}>
-          Word List
-        </BenkyoText>
+        <BenkyoText style={[header3, textBold, textCenter]}>Results</BenkyoText>
       </HeaderBox>
       <FlatList
         key={item => item.kanji}
-        data={words}
+        data={testedWords}
         renderItem={renderItem}
-        windowSize={15}
-        removeClippedSubviews={true}
-        initialNumToRender={5}
-        maxToRenderPerBatch={5}
         contentContainerStyle={{
           flexDirection: 'column',
           alignItems: 'flex-end',
         }}
       />
+      <BenkyoButton
+        style={{ marginTop: 20 }}
+        title="Go Home"
+        onPress={() => navigation.navigate('Home')}
+      />
     </Container>
   );
 };
 
-export default WordList;
+export default Results;

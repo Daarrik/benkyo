@@ -4,8 +4,8 @@ import { styles } from '../constants';
 
 const { headerBox } = styles;
 
-const HeaderBox = ({ children }) => {
-  return <View style={headerBox}>{children}</View>;
+const HeaderBox = ({ style, children }) => {
+  return <View style={[headerBox, style]}>{children}</View>;
 };
 
 export default HeaderBox;

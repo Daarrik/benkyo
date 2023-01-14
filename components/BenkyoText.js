@@ -2,10 +2,10 @@ import React from 'react';
 import { Text } from 'react-native';
 import { styles } from '../constants';
 
-const { text } = styles;
+const { benkyoText } = styles;
 
 const BenkyoText = ({ style, children }) => {
-  return <Text style={[text, style]}>{children}</Text>;
+  return <Text style={[benkyoText, style]}>{children}</Text>;
 };
 
 export default BenkyoText;

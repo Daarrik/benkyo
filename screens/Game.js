@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { ToastAndroid, View } from 'react-native';
 import {
   Container,
@@ -9,6 +9,7 @@ import {
   Result,
   Backdrop,
   DragAndDrop,
+  GameStatus,
 } from '../components';
 import { words, kana, styles } from '../constants';
 
@@ -19,36 +20,21 @@ const Game = ({ navigation, route: { params } }) => {
 
   const [kanjiEntry, setKanjiEntry] = useState(() => {
     if (isRandom) {
-      return words[Math.floor(Math.random() * words.length)];
+      return getRandomKanjiEntry();
     } else {
       return {
-        kanji: selectedEntry['kanji'],
-        reading: selectedEntry['reading'],
+        kanji: selectedEntry.kanji,
+        reading: selectedEntry.reading,
+        kanaBoxes: generateKanaBoxes(selectedEntry.reading),
       };
     }
   });
-  const { kanji, reading } = kanjiEntry;
+  const { kanji, reading, kanaBoxes } = kanjiEntry;
 
-  const [textInput, setTextInput] = useState(false);
+  const [testedWords, setTestedWords] = useState([]);
+  const [textInput, setTextInput] = useState(true);
   const [guess, setGuess] = useState('');
   const [guessed, setGuessed] = useState(false);
-
-  const generateKanaBoxes = useCallback(() => {
-    if (reading.length >= 7) return shuffle(reading.split(''));
-
-    wrongAnswers = [];
-    for (let i = 0; i < 7 - reading.length; i++)
-      wrongAnswers.push(kana.charAt(Math.random() * kana.length));
-
-    const answers = shuffle(reading.split('').concat(wrongAnswers));
-    return answers;
-  });
-  const [kanaBoxes, setKanaBoxes] = useState(() => generateKanaBoxes());
-
-  // Could potentially get rid of this by including answers as non-stateful
-  useEffect(() => {
-    setKanaBoxes(generateKanaBoxes());
-  }, [kanjiEntry]);
 
   const submitGuess = () => {
     if (guess === '') {
@@ -63,14 +49,28 @@ const Game = ({ navigation, route: { params } }) => {
     setGuessed(true);
   };
 
-  const newGame = () => {
+  const nextWord = () => {
     if (!isRandom) navigation.goBack();
+    if (testedWords.length === 9)
+      navigation.reset({
+        index: 1,
+        routes: [
+          { name: 'Home' },
+          { name: 'Results', params: { testedWords: testedWords } },
+        ],
+      });
+
+    setTestedWords(previousTestedWords =>
+      previousTestedWords.concat({
+        kanji: kanji,
+        reading: reading,
+        correct: reading === guess,
+      }),
+    );
 
     setGuess('');
     setGuessed(false);
-
-    const newEntry = words[Math.floor(Math.random() * words.length)];
-    setKanjiEntry(newEntry);
+    setKanjiEntry(getRandomKanjiEntry);
   };
 
   const displayInput = () => {
@@ -84,25 +84,30 @@ const Game = ({ navigation, route: { params } }) => {
   return (
     <Container>
       <Backdrop word={kanji} />
-      <HeaderBox>
+      <HeaderBox style={{ flex: 4 }}>
+        {isRandom && <GameStatus fillAmount={testedWords.length} />}
         <BenkyoText style={[textBold, textCenter]}>
           What is the reading of this word?
         </BenkyoText>
         <BenkyoText style={[header, textBold, textCenter]}>{kanji}</BenkyoText>
       </HeaderBox>
-      <View style={{ flex: 1, justifyContent: 'space-between' }}>
+      <View style={{ flex: 5 }}>
         {!guessed ? displayInput() : <Result isCorrect={reading === guess} />}
+      </View>
+      <View style={{ flex: 1, justifyContent: 'flex-end' }}>
         <BenkyoButton
           style={{ backgroundColor: 'darkgreen' }}
-          title="Continue"
-          onPress={!guessed ? submitGuess : newGame}
+          title={!guessed ? 'Check' : 'Continue'}
+          onPress={!guessed ? submitGuess : nextWord}
         />
       </View>
     </Container>
   );
 };
 
-export const shuffle = array => {
+export default Game;
+
+function shuffle(array) {
   let currentIndex = array.length,
     randomIndex;
 
@@ -120,6 +125,21 @@ export const shuffle = array => {
   }
 
   return array;
-};
+}
 
-export default Game;
+function getRandomKanjiEntry() {
+  const kanjiEntry = words[Math.floor(Math.random() * words.length)];
+  kanjiEntry.kanaBoxes = generateKanaBoxes(kanjiEntry.reading);
+  return kanjiEntry;
+}
+
+function generateKanaBoxes(reading) {
+  if (reading.length >= 7) return shuffle(reading.split(''));
+
+  wrongAnswers = [];
+  for (let i = 0; i < 7 - reading.length; i++)
+    wrongAnswers.push(kana.charAt(Math.random() * kana.length));
+
+  const answers = shuffle(reading.split('').concat(wrongAnswers));
+  return answers;
+}

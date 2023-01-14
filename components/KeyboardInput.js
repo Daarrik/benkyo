@@ -2,12 +2,12 @@ import React from 'react';
 import { TextInput } from 'react-native';
 import { styles } from '../constants';
 
-const { textInput, text, textBlack, textBold, textCenter } = styles;
+const { textInput, header3, textBlack, textBold, textCenter } = styles;
 
 const KeyboardInput = ({ guess, setGuess }) => {
   return (
     <TextInput
-      style={[textInput, text, textBlack, textBold, textCenter]}
+      style={[textInput, header3, textBlack, textBold, textCenter]}
       onChangeText={setGuess}
       value={guess}
       placeholder="Guess here"

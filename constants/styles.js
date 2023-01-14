@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 
 const WHITE = '#dadce1';
 const BG_COLOR = '#161f23';
+const ACCENT_COLOR = '#10171a';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,8 +15,8 @@ const styles = StyleSheet.create({
     left: -40,
     bottom: -90,
     paddingTop: 150,
+    color: ACCENT_COLOR,
     zIndex: -1,
-    opacity: 0.5,
   },
   backdrop2Char: {
     fontSize: 350,
@@ -32,9 +33,12 @@ const styles = StyleSheet.create({
     fontSize: 90,
   },
   header2: {
-    fontSize: 50,
+    fontSize: 64,
   },
-  text: {
+  header3: {
+    fontSize: 48,
+  },
+  benkyoText: {
     fontFamily: 'Nunito-Regular',
     fontSize: 20,
     color: WHITE,
@@ -52,17 +56,29 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: 'column',
     justifyContent: 'center',
-    width: '100%',
     height: 45,
+    marginHorizontal: 10,
     borderRadius: 10,
     backgroundColor: WHITE,
   },
   textInput: {
     width: '100%',
-    height: 80,
+    height: 150,
     borderRadius: 10,
-    backgroundColor: '#dadce1',
+    backgroundColor: WHITE,
     color: 'black',
+  },
+  statusContainer: {
+    height: 16,
+    marginHorizontal: 50,
+    marginBottom: 10,
+    borderRadius: 10,
+    backgroundColor: ACCENT_COLOR,
+  },
+  statusBar: {
+    height: 16,
+    borderRadius: 10,
+    backgroundColor: WHITE,
   },
 });
 

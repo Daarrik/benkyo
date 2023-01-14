@@ -2,11 +2,11 @@
 
 ### About
 
-<b>Benkyo</b> is a React Native application for studying the readings of Japanese words, built specifically for Android. Benkyo is a passion project (and final project for CS 4750) written in two weeks, and as such there are several messy parts to its code which I plan to clean up in the ~~near~~ future.
+<b>Benkyo</b> is a React Native application for studying the readings of Japanese words, built specifically for Android. Benkyo is a passion project (and final project for CS 4750) written in two weeks. Much, if not all, of the messy code from those two weeks has been removed.
 
 ### How to Run
 
-This is unfortunately <b>not</b> an Expo project.
+This is unfortunately <b>not</b> an Expo project, but I plan to convert the project to Expo in the future.
 
 First follow the development environment setup for React Native [here](https://reactnative.dev/docs/environment-setup).
 
@@ -22,4 +22,6 @@ First follow the development environment setup for React Native [here](https://r
 
 2. Useful study application features like number of times correct/incorrect
 
-3. Clean up code eyesores
+3. ~~Clean up code eyesores~~
+
+4. Review Screen

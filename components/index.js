@@ -7,3 +7,4 @@ export { default as BenkyoText } from './BenkyoText';
 export { default as Backdrop } from './Backdrop';
 export { default as Container } from './Container';
 export { default as HeaderBox } from './HeaderBox';
+export { default as GameStatus } from './GameStatus';
