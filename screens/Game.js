@@ -32,7 +32,7 @@ const Game = ({ navigation, route: { params } }) => {
   const { kanji, reading, kanaBoxes } = kanjiEntry;
 
   const [testedWords, setTestedWords] = useState([]);
-  const [textInput, setTextInput] = useState(true);
+  const [textInput, setTextInput] = useState(false);
   const [guess, setGuess] = useState('');
   const [guessed, setGuessed] = useState(false);
 
@@ -84,7 +84,7 @@ const Game = ({ navigation, route: { params } }) => {
   return (
     <Container>
       <Backdrop word={kanji} />
-      <HeaderBox style={{ flex: 4 }}>
+      <HeaderBox style={{ flex: 4, justifyContent: 'center' }}>
         {isRandom && <GameStatus fillAmount={testedWords.length} />}
         <BenkyoText style={[textBold, textCenter]}>
           What is the reading of this word?

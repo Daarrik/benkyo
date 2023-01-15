@@ -6,15 +6,12 @@
 
 ### How to Run
 
-This is unfortunately <b>not</b> an Expo project, but I plan to convert the project to Expo in the future.
-
 First follow the development environment setup for React Native [here](https://reactnative.dev/docs/environment-setup).
+This is the Expo version of the same app.
 
-1. `npm install` or `yarn`
+1. Run `yarn`
 
-2. In a terminal: `npx react-native start`
-
-3. In a separate terminal: `npx react-native run-android` (I have never tested the app on iOS)
+2. In a terminal: `npx expo start`
 
 ### To-Do
 
@@ -24,4 +21,4 @@ First follow the development environment setup for React Native [here](https://r
 
 3. ~~Clean up code eyesores~~
 
-4. Review Screen
+4. ~~Review Screen~~

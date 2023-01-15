@@ -28,7 +28,7 @@ const WordList = ({ navigation }) => {
   return (
     <Container>
       <Backdrop word="リスト" />
-      <HeaderBox>
+      <HeaderBox style={{ marginTop: 10 }}>
         <BenkyoText style={[header3, textBold, textCenter]}>
           Word List
         </BenkyoText>
